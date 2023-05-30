@@ -1,3 +1,4 @@
+import bcrypt from 'bcrypt'
 import { Model, Schema, model } from 'mongoose'
 import { IUser } from './users.interface'
 
@@ -6,7 +7,11 @@ const userSchema = new Schema<IUser>(
   {
     id: { type: String, required: true, unique: true },
     email: { type: String, required: true, unique: true },
-    password: { type: String, required: true },
+    password: {
+      type: String,
+      required: true,
+      set: (v: string | Buffer) => bcrypt.hashSync(v, bcrypt.genSaltSync(12)),
+    },
     role: { type: String, required: true },
   },
   {
