@@ -10,6 +10,7 @@ const userSchema = new Schema<IUser>(
     password: {
       type: String,
       required: true,
+      // eslint-disable-next-line no-undef
       set: (v: string | Buffer) => bcrypt.hashSync(v, bcrypt.genSaltSync(12)),
     },
     role: { type: String, required: true },

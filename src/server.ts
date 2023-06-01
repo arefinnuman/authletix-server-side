@@ -8,12 +8,12 @@ const dataBaseUrl = config.database_url as string
 async function bootstrap() {
   try {
     await mongoose.connect(dataBaseUrl)
-    console.log(`DataBase Connected`)
+    // console.log(`DataBase Connected`)
     app.listen(usingPort, () => {
-      console.log(`EasyBuy Server on port ${usingPort}`)
+      // console.log(`EasyBuy Server on port ${usingPort}`)
     })
   } catch (err) {
-    console.log(`Failed to connect`, err)
+    // console.log(`Failed to connect`, err)
   }
 }
 
