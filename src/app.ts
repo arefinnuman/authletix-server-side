@@ -1,8 +1,9 @@
 import cors from 'cors'
-import express, { Application } from 'express'
+import express, { Application, NextFunction, Request, Response } from 'express'
 import { limiter } from './app/config/ratelimiter'
-import globalErrorHandler from './app/middlewares/globalErrorHandler'
-import userRouter from './app/modules/users/users.routes'
+import ApiError from './app/errors/ApiError'
+import globalErrorHandler from './app/modules/middlewares/globalErrorHandler'
+import { UserRouter } from './app/modules/users/user.routes'
 
 const app: Application = express()
 
@@ -14,10 +15,16 @@ app.use(limiter)
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
+// Application Routes
+app.use('/api/v1/users/', UserRouter)
+
 // Error Handler
 app.use(globalErrorHandler)
 
-// Application Routes
-app.use('/api/v1/users/', userRouter)
+// Testing Routes
+// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+app.get('/', async (req: Request, res: Response, next: NextFunction) => {
+  throw new ApiError(400, `Ore Baba Error`)
+})
 
 export default app
