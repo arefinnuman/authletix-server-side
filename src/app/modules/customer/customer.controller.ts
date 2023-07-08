@@ -1,0 +1,89 @@
+import { Request, Response } from 'express';
+import httpStatus from 'http-status';
+import { paginationFields } from '../../../constants/paginationField';
+import catchAsync from '../../../functions/catchAsync';
+import sendResponse from '../../../functions/sendResponse';
+import pick from '../../../interfaces/pick';
+import { studentFilterableFields } from './customer.constant';
+import { ICustomer } from './customer.interface';
+import { CustomerService } from './customer.service';
+
+const getAllCustomer = catchAsync(async (req: Request, res: Response) => {
+  const filters = pick(req.query, studentFilterableFields);
+  const paginationOptions = pick(req.query, paginationFields);
+
+  const result = await CustomerService.getAllCustomer(
+    filters,
+    paginationOptions
+  );
+
+  sendResponse<ICustomer[]>(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: `Student Data`,
+    meta: result.meta,
+    data: result.data,
+  });
+});
+
+const getSingleCustomer = catchAsync(async (req: Request, res: Response) => {
+  const id = req.params.id;
+  const result = await CustomerService.getSingleCustomer(id);
+
+  if (result === null) {
+    sendResponse(res, {
+      statusCode: httpStatus.NOT_FOUND,
+      success: false,
+      message: `${id} not found in Database`,
+    });
+  } else {
+    sendResponse<ICustomer>(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: `Customer Data`,
+      data: result,
+    });
+  }
+});
+
+const updateCustomer = catchAsync(async (req: Request, res: Response) => {
+  const id = req.params.id;
+  const updatedData = req.body;
+
+  const result = await CustomerService.updateCustomer(id, updatedData);
+
+  if (result === null) {
+    sendResponse(res, {
+      statusCode: httpStatus.NOT_FOUND,
+      success: false,
+      message: `${id} not found in Database`,
+    });
+  } else {
+    sendResponse<ICustomer>(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: `Customer Data Updated`,
+      data: result,
+    });
+  }
+});
+
+const deleteCustomer = catchAsync(async (req: Request, res: Response) => {
+  const id = req.params.id;
+  const result = await CustomerService.deleteCustomer(id);
+
+  sendResponse<ICustomer>(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Customer deleted successfully !',
+    data: undefined,
+  });
+  return result;
+});
+
+export const CustomerController = {
+  getAllCustomer,
+  getSingleCustomer,
+  updateCustomer,
+  deleteCustomer,
+};
