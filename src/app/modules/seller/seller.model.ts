@@ -61,6 +61,9 @@ export const SellerSchema = new Schema<ISeller, SellerModel>(
     description: {
       type: String,
     },
+    balance: {
+      type: Number,
+    },
   },
   {
     timestamps: true,

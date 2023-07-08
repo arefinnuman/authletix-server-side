@@ -1,33 +1,32 @@
 import { Schema, model } from 'mongoose';
-import { breed, category, label, location } from './cow.constant';
-import { CowModel, ICow } from './cow.interface';
+import { BrandName, deliveryTime, label } from './product.constant';
+import { IProduct, ProductModel } from './product.interface';
 
-const cowSchema = new Schema<ICow>(
+const ProductSchema = new Schema<IProduct>(
   {
     name: {
       type: String,
-      required: true,
-    },
-    age: {
-      type: Number,
       required: true,
     },
     price: {
       type: Number,
       required: true,
     },
-    location: {
+    productPhoto: {
       type: String,
-      enum: location,
+    },
+    description: {
+      type: String,
       required: true,
     },
-    breed: {
+    brand: {
       type: String,
-      enum: breed,
+      enum: BrandName,
       required: true,
     },
-    weight: {
-      type: Number,
+    availableForDelivery: {
+      type: String,
+      enum: deliveryTime,
       required: true,
     },
     label: {
@@ -36,13 +35,12 @@ const cowSchema = new Schema<ICow>(
       required: true,
     },
     category: {
-      type: String,
-      enum: category,
+      type: Schema.Types.ObjectId,
       required: true,
     },
     seller: {
       type: Schema.Types.ObjectId,
-      ref: 'User',
+      ref: 'Seller',
       required: true,
     },
   },
@@ -54,4 +52,4 @@ const cowSchema = new Schema<ICow>(
   }
 );
 
-export const Cow = model<ICow, CowModel>('Cow', cowSchema);
+export const Product = model<IProduct, ProductModel>('Product', ProductSchema);

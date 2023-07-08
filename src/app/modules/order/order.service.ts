@@ -2,10 +2,10 @@
 import httpStatus from 'http-status';
 import mongoose from 'mongoose';
 import ApiError from '../../../handlingError/apiError';
-import { ICow } from '../cow/cow.interface';
+import { ICow } from '../cow/product.interface';
+import { Cow } from '../cow/product.model';
 import { IUser } from '../user/user.interface';
 import { User } from '../user/user.model';
-import { Cow } from './../cow/cow.model';
 import { IOrder } from './order.interface';
 import { Order } from './order.model';
 

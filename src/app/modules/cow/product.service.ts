@@ -5,15 +5,16 @@ import { PaginationHelpers } from '../../../helper/paginationHelper';
 import { IConstantFilters } from '../../../interfaces/constantFilters';
 import { IGenericResponse } from '../../../interfaces/genericResponse';
 import { IPaginationOptions } from '../../../interfaces/pagination';
-import { User } from './../user/user.model';
-import { LabelEnum, cowSearchableFields } from './cow.constant';
-import { ICow } from './cow.interface';
-import { Cow } from './cow.model';
+import { Seller } from '../seller/seller.model';
+import { LabelEnum, productSearchableFields } from './product.constant';
+import { IProduct } from './product.interface';
+import { Product } from './product.model';
 
-const createCow = async (payload: ICow): Promise<ICow | null> => {
-  payload.label = LabelEnum.ForSale;
-
-  const isSeller = await User.findOne({ _id: payload.seller, role: 'seller' });
+const createProduct = async (payload: IProduct): Promise<IProduct | null> => {
+  payload.label = LabelEnum.Available;
+  const isSeller = await Seller.findOne({
+    _id: payload.seller,
+  });
 
   if (!isSeller) {
     throw new ApiError(
@@ -22,21 +23,21 @@ const createCow = async (payload: ICow): Promise<ICow | null> => {
     );
   }
 
-  const result = (await Cow.create(payload)).populate('seller');
+  const result = (await Product.create(payload)).populate('seller');
   return result;
 };
 
-const getCow = async (
+const getProduct = async (
   filters: Partial<IConstantFilters>,
   paginationOptions: IPaginationOptions
-): Promise<IGenericResponse<ICow[]>> => {
+): Promise<IGenericResponse<IProduct[]>> => {
   const { searchTerm, ...filtersData } = filters;
 
   const andConditions: { [x: string]: unknown }[] = [];
 
   if (searchTerm) {
     andConditions.push({
-      $or: cowSearchableFields.map((field: string) => ({
+      $or: productSearchableFields.map((field: string) => ({
         [field]: {
           $regex: searchTerm,
           $options: 'i',
@@ -68,13 +69,13 @@ const getCow = async (
         }
       : {};
 
-  const result = await Cow.find(whereConditions)
+  const result = await Product.find(whereConditions)
     .populate('seller')
     .sort(sortConditions)
     .skip(skip)
     .limit(limit);
 
-  const total = await Cow.countDocuments();
+  const total = await Product.countDocuments();
   return {
     meta: {
       page,
@@ -85,48 +86,48 @@ const getCow = async (
   };
 };
 
-const getSingleCow = async (id: string): Promise<ICow | null> => {
-  const result = await Cow.findById(id).populate('seller');
+const getSingleProduct = async (id: string): Promise<IProduct | null> => {
+  const result = await Product.findById(id).populate('seller');
 
   if (!result) {
-    throw new ApiError(httpStatus.NOT_FOUND, `Cow (${id}) not found`);
+    throw new ApiError(httpStatus.NOT_FOUND, `Product (${id}) not found`);
   }
 
   return result;
 };
 
-const updateCow = async (
+const updateProduct = async (
   id: string,
-  payload: Partial<ICow>
-): Promise<ICow | null> => {
-  const isExist = await Cow.findOne({ _id: id });
+  payload: Partial<IProduct>
+): Promise<IProduct | null> => {
+  const isExist = await Product.findOne({ _id: id });
 
   if (!isExist) {
     throw new ApiError(httpStatus.NOT_FOUND, `Student (${id}) not found`);
   }
 
-  const result = await Cow.findOneAndUpdate({ _id: id }, payload, {
+  const result = await Product.findOneAndUpdate({ _id: id }, payload, {
     new: true,
   }).populate('seller');
 
   return result;
 };
 
-const deleteCow = async (id: string): Promise<ICow | null> => {
-  const isExist = await Cow.findOne({ _id: id });
+const deleteProduct = async (id: string): Promise<IProduct | null> => {
+  const isExist = await Product.findOne({ _id: id });
 
   if (!isExist) {
     throw new ApiError(httpStatus.NOT_FOUND, `Student (${id}) not found`);
   }
 
-  const result = await Cow.findOneAndDelete({ _id: id }, { new: true });
+  const result = await Product.findOneAndDelete({ _id: id }, { new: true });
   return result;
 };
 
-export const CowService = {
-  createCow,
-  getSingleCow,
-  updateCow,
-  deleteCow,
-  getCow,
+export const ProductService = {
+  createProduct,
+  getSingleProduct,
+  updateProduct,
+  deleteProduct,
+  getProduct,
 };

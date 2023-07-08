@@ -61,6 +61,7 @@ const createSeller = async (
     session.startTransaction();
 
     seller.email = user.email;
+    seller.balance = 0;
 
     const newSeller = await Seller.create([seller], { session });
     if (!newSeller.length) {

@@ -19,6 +19,7 @@ export type ISeller = {
   merchantLicenseNo: string;
   websiteLink?: string;
   description?: string;
+  balance?: number;
 };
 
 export type SellerModel = Model<ISeller, Record<string, unknown>>;
