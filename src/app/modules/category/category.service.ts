@@ -6,10 +6,7 @@ import { ICategory, ICategoryFilters } from './category.interface';
 import { Category } from './category.model';
 import { categorySearchableFields } from './category.constant';
 
-
-const createCategory = async (
-  payload: ICategory
-): Promise<ICategory> => {
+const createCategory = async (payload: ICategory): Promise<ICategory> => {
   const result = await Category.create(payload);
   return result;
 };
@@ -72,9 +69,7 @@ const getAllCategory = async (
   };
 };
 
-const getSingleCategory = async (
-  id: string
-): Promise<ICategory | null> => {
+const getSingleCategory = async (id: string): Promise<ICategory | null> => {
   const result = await Category.findById(id);
   return result;
 };
@@ -83,19 +78,13 @@ const updateCategory = async (
   id: string,
   payload: Partial<ICategory>
 ): Promise<ICategory | null> => {
-  const result = await Category.findOneAndUpdate(
-    { _id: id },
-    payload,
-    {
-      new: true,
-    }
-  );
+  const result = await Category.findOneAndUpdate({ _id: id }, payload, {
+    new: true,
+  });
   return result;
 };
 
-const deleteCategory = async (
-  id: string
-): Promise<ICategory | null> => {
+const deleteCategory = async (id: string): Promise<ICategory | null> => {
   const result = await Category.findByIdAndDelete(id, { new: true });
   return result;
 };
