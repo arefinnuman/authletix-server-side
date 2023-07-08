@@ -17,7 +17,7 @@ const getAllSeller = catchAsync(async (req: Request, res: Response) => {
   sendResponse<ISeller[]>(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: `Student Data`,
+    message: `Fetching Seller Data Successfully`,
     meta: result.meta,
     data: result.data,
   });
@@ -37,7 +37,7 @@ const getSingleSeller = catchAsync(async (req: Request, res: Response) => {
     sendResponse<ISeller>(res, {
       statusCode: httpStatus.OK,
       success: true,
-      message: `Student Data`,
+      message: `Fetching Seller Data Success`,
       data: result,
     });
   }

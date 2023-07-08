@@ -22,7 +22,7 @@ const moduleRoutes = [
     route: AdminRoutes,
   },
   {
-    path: '/seller/',
+    path: '/sellers/',
     route: SellerRoutes,
   },
   {

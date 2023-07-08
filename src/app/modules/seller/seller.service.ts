@@ -83,10 +83,10 @@ const updateSeller = async (
   if (!isExist) {
     throw new ApiError(httpStatus.NOT_FOUND, `seller not found`);
   }
-
   const { name, ...sellerData } = payload;
 
   const updatedSellerData: Partial<ISeller> = { ...sellerData };
+
   if (name && Object.keys(name).length > 0) {
     Object.keys(name).forEach(key => {
       const nameKey = `name.${key}`;
@@ -106,20 +106,20 @@ const deleteSeller = async (id: string): Promise<ISeller | null> => {
     throw new ApiError(httpStatus.NOT_FOUND, 'Seller not found !');
   }
 
-  const session = await mongoose.startSession();
+  const email = isExist?.email;
 
+  const session = await mongoose.startSession();
   try {
     session.startTransaction();
 
-    const seller = await Seller.findOneAndDelete({ id }, { session });
+    const seller = await Seller.findOneAndDelete({ email }, { session });
     if (!seller) {
       throw new ApiError(404, 'Failed to delete student');
     }
 
-    await User.deleteOne({ id });
+    await User.deleteOne({ email });
     session.commitTransaction();
     session.endSession();
-
     return seller;
   } catch (error) {
     session.abortTransaction();
