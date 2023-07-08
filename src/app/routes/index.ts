@@ -1,8 +1,10 @@
 import express from 'express';
 import { AdminRoutes } from '../modules/admin/admin.routes';
 import { AuthRoutes } from '../modules/auth/auth.routes';
+import { CategoryRoutes } from '../modules/category/category.routes';
 import { CustomerRoutes } from '../modules/customer/customer.routes';
 import { ManagingDepartmentRoutes } from '../modules/managingDepartment/managingDepartment.routes';
+import { ProductRoutes } from '../modules/product/product.routes';
 import { SellerRoutes } from '../modules/seller/seller.routes';
 import { UserRoutes } from '../modules/user/user.routes';
 
@@ -28,6 +30,15 @@ const moduleRoutes = [
   {
     path: '/customers/',
     route: CustomerRoutes,
+  },
+  {
+    path: '/products/',
+    route: ProductRoutes,
+  },
+
+  {
+    path: '/categories/',
+    route: CategoryRoutes,
   },
   {
     path: '/managing-department/',

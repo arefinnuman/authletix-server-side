@@ -9,7 +9,7 @@ const createProductZodSchema = z.object({
     productPhoto: z.string().optional(),
     brand: z.enum([...BrandName] as [string, ...string[]]),
     availableForDelivery: z.enum([...deliveryTime] as [string, ...string[]]),
-    label: z.enum([...label] as [string, ...string[]]),
+    label: z.enum([...label] as [string, ...string[]]).optional(),
     category: z.string(),
     seller: z.string(),
   }),

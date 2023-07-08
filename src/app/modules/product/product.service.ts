@@ -5,25 +5,15 @@ import { PaginationHelpers } from '../../../helper/paginationHelper';
 import { IConstantFilters } from '../../../interfaces/constantFilters';
 import { IGenericResponse } from '../../../interfaces/genericResponse';
 import { IPaginationOptions } from '../../../interfaces/pagination';
-import { Seller } from '../seller/seller.model';
 import { LabelEnum, productSearchableFields } from './product.constant';
 import { IProduct } from './product.interface';
 import { Product } from './product.model';
 
 const createProduct = async (payload: IProduct): Promise<IProduct | null> => {
   payload.label = LabelEnum.Available;
-  const isSeller = await Seller.findOne({
-    _id: payload.seller,
-  });
-
-  if (!isSeller) {
-    throw new ApiError(
-      httpStatus.NOT_FOUND,
-      `User (${payload.seller}) is not a seller or not found`
-    );
-  }
-
-  const result = (await Product.create(payload)).populate('seller');
+  const result = (
+    await (await Product.create(payload)).populate('seller')
+  ).populate('category');
   return result;
 };
 

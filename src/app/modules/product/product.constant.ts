@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 export enum DeliveryTimeEnum {
-  TwoDays = '1 days to 3 days',
+  TwoDays = '1 day to 3 days',
   AroundWeek = '7 days to 8 days',
   AroundMonth = '23 days to 28 days',
 }
@@ -17,7 +17,7 @@ export enum BrandEnum {
 }
 
 export const deliveryTime = [
-  '1 days to 3 days',
+  '1 day to 3 days',
   '7 days to 8 days',
   '23 days to 28 days',
 ];

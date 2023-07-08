@@ -4,9 +4,9 @@ import { paginationFields } from '../../../constants/paginationField';
 import catchAsync from '../../../functions/catchAsync';
 import sendResponse from '../../../functions/sendResponse';
 import pick from '../../../interfaces/pick';
-import { CategoryService } from './category.service';
 import { categoryFilterableFields } from './category.constant';
 import { ICategory } from './category.interface';
+import { CategoryService } from './category.service';
 
 const createCategory = catchAsync(async (req: Request, res: Response) => {
   const { ...academicCategoryData } = req.body;
@@ -15,7 +15,7 @@ const createCategory = catchAsync(async (req: Request, res: Response) => {
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: `Managing Department Created Successfully`,
+    message: `Category Created Successfully`,
     data: result,
   });
 });
