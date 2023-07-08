@@ -20,7 +20,7 @@ const getAllCustomer = catchAsync(async (req: Request, res: Response) => {
   sendResponse<ICustomer[]>(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: `Student Data`,
+    message: `Customer Data`,
     meta: result.meta,
     data: result.data,
   });
@@ -76,9 +76,8 @@ const deleteCustomer = catchAsync(async (req: Request, res: Response) => {
     statusCode: httpStatus.OK,
     success: true,
     message: 'Customer deleted successfully !',
-    data: undefined,
+    data: result,
   });
-  return result;
 });
 
 export const CustomerController = {

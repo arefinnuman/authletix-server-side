@@ -60,14 +60,14 @@ const createSeller = async (
   try {
     session.startTransaction();
 
-    const mewSeller = await Seller.create([seller], { session });
+    seller.email = user.email;
 
-    if (!mewSeller.length) {
-      throw new ApiError(httpStatus.BAD_REQUEST, 'Failed to create Seller');
+    const newSeller = await Seller.create([seller], { session });
+    if (!newSeller.length) {
+      throw new ApiError(httpStatus.BAD_REQUEST, 'failed to create seller');
     }
 
-    user.seller = mewSeller[0]._id;
-
+    user.seller = newSeller[0]._id;
     const newUser = await User.create([user], { session });
     if (!newUser.length) {
       throw new ApiError(httpStatus.BAD_REQUEST, 'Failed to create user');
@@ -81,6 +81,9 @@ const createSeller = async (
     await session.endSession();
     throw error;
   }
+  newUserAllData = await User.findOne({ email: newUserAllData.email }).populate(
+    'seller'
+  );
 
   return newUserAllData;
 };
@@ -96,18 +99,17 @@ const createAdmin = async (
   try {
     session.startTransaction();
 
-    const newAdmin = await Admin.create([admin], { session });
+    admin.email = user.email;
 
+    const newAdmin = await Admin.create([admin], { session });
     if (!newAdmin.length) {
-      throw new ApiError(httpStatus.BAD_REQUEST, 'Failed to create Seller ');
+      throw new ApiError(httpStatus.BAD_REQUEST, 'Failed to create customer');
     }
 
     user.admin = newAdmin[0]._id;
-
     const newUser = await User.create([user], { session });
-
     if (!newUser.length) {
-      throw new ApiError(httpStatus.BAD_REQUEST, 'Failed to create admin');
+      throw new ApiError(httpStatus.BAD_REQUEST, 'Failed to create user');
     }
     newUserAllData = newUser[0];
 
@@ -120,7 +122,9 @@ const createAdmin = async (
   }
 
   if (newUserAllData) {
-    newUserAllData = await User.findOne({ id: newUserAllData.id }).populate({
+    newUserAllData = await User.findOne({
+      email: newUserAllData.email,
+    }).populate({
       path: 'admin',
       populate: [
         {

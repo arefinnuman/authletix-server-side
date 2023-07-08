@@ -8,7 +8,6 @@ export type UserName = {
 };
 
 export type IAdmin = {
-  id: string;
   name: UserName;
   profileImage: string;
   dateOfBirth?: string;
@@ -19,8 +18,7 @@ export type IAdmin = {
   permanentAddress?: string;
   presentAddress?: string;
   bloodGroup?: 'A+' | 'A-' | 'B+' | 'B-' | 'AB+' | 'AB-' | 'O+' | 'O-';
-
-  managementDepartment: Types.ObjectId | IManagingDepartment;
+  managementDepartment?: Types.ObjectId | IManagingDepartment;
   designation: string;
 };
 

@@ -5,7 +5,6 @@ import { AdminValidation } from './admin.validation';
 const router = express.Router();
 
 router.get('/:id', AdminController.getSingleAdmin);
-router.get('/', AdminController.getAllAdmins);
 
 router.delete('/:id', AdminController.deleteAdmin);
 
@@ -14,5 +13,7 @@ router.patch(
   validateRequest(AdminValidation.updateAdmin),
   AdminController.updateAdmin
 );
+
+router.get('/', AdminController.getAllAdmins);
 
 export const AdminRoutes = router;

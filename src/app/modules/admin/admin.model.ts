@@ -3,11 +3,6 @@ import { AdminModel, IAdmin } from './admin.interface';
 
 const AdminSchema = new Schema<IAdmin, AdminModel>(
   {
-    id: {
-      type: String,
-      required: true,
-      unique: true,
-    },
     name: {
       type: {
         firstName: {
@@ -60,12 +55,11 @@ const AdminSchema = new Schema<IAdmin, AdminModel>(
     },
     managementDepartment: {
       type: Schema.Types.ObjectId,
-      ref: 'ManagementDepartment',
+      ref: 'ManagingDepartment',
       required: true,
     },
     designation: {
       type: String,
-      required: true,
     },
     profileImage: {
       type: String,
@@ -73,6 +67,9 @@ const AdminSchema = new Schema<IAdmin, AdminModel>(
   },
   {
     timestamps: true,
+    toJSON: {
+      virtuals: true,
+    },
   }
 );
 

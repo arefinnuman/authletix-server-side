@@ -103,27 +103,30 @@ const updateCustomer = async (
 };
 
 const deleteCustomer = async (id: string): Promise<ICustomer | null> => {
-  const isExist = await Customer.findOne({ id });
+  // check if the faculty is exist
+  const isExist = await Customer.findOne({ _id: id });
 
   if (!isExist) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'Customer not found !');
+    throw new ApiError(httpStatus.NOT_FOUND, 'admin is not found !');
   }
+
+  const email = isExist?.email;
 
   const session = await mongoose.startSession();
 
   try {
     session.startTransaction();
-    //delete Customer first
-    const customer = await Customer.findOneAndDelete({ id }, { session });
-    if (!customer) {
-      throw new ApiError(404, 'Failed to delete Customer');
+    //delete student first
+    const admin = await Customer.findOneAndDelete({ email }, { session });
+    if (!admin) {
+      throw new ApiError(404, 'Failed to delete admin');
     }
     //delete user
-    await User.deleteOne({ id });
+    await User.deleteOne({ email });
     session.commitTransaction();
     session.endSession();
 
-    return customer;
+    return admin;
   } catch (error) {
     session.abortTransaction();
     throw error;

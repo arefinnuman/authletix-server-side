@@ -1,12 +1,13 @@
 import { Request, Response } from 'express';
 import httpStatus from 'http-status';
-import catchAsync from '../../../config/catchAsync';
-import sendResponse from '../../../config/sendResponse';
-import { paginationFields } from '../../../constants/paginations';
+
 import pick from '../../../interfaces/pick';
 import { adminFilterableFields } from './admin.constant';
 import { IAdmin } from './admin.interface';
 import { AdminService } from './admin.service';
+import catchAsync from '../../../functions/catchAsync';
+import { paginationFields } from '../../../constants/paginationField';
+import sendResponse from '../../../functions/sendResponse';
 
 const getAllAdmins = catchAsync(async (req: Request, res: Response) => {
   const filters = pick(req.query, adminFilterableFields);
