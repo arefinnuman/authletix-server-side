@@ -2,9 +2,9 @@ import { Request, Response } from 'express';
 import httpStatus from 'http-status';
 import config from '../../../config';
 
-import { AuthService } from './auth.service';
 import catchAsync from '../../../functions/catchAsync';
 import sendResponse from '../../../functions/sendResponse';
+import { AuthService } from './auth.service';
 
 const loginUser = catchAsync(async (req: Request, res: Response) => {
   const { ...loginData } = req.body;
@@ -41,7 +41,7 @@ const refreshToken = catchAsync(async (req: Request, res: Response) => {
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: `User logged in successfully !`,
+    message: `Refresh Token generated!`,
     data: result,
   });
 });
