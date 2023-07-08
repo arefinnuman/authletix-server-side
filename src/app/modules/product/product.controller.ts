@@ -49,27 +49,37 @@ const getSingleProduct = catchAsync(async (req: Request, res: Response) => {
 });
 
 const updateProduct = catchAsync(async (req: Request, res: Response) => {
+  const verifiedSeller = req.user;
+
+  const sellerEmail = verifiedSeller?.userEmail;
   const id = req.params.id;
   const productData = req.body;
 
-  const result = await ProductService.updateProduct(id, productData);
+  const result = await ProductService.updateProduct(
+    id,
+    sellerEmail,
+    productData
+  );
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: `Product(${id}) updated successfully`,
+    message: `Product updated successfully`,
     data: result,
   });
 });
 
 const deleteProduct = catchAsync(async (req: Request, res: Response) => {
+  const verifiedSeller = req.user;
+  const sellerEmail = verifiedSeller?.userEmail;
   const id = req.params.id;
-  const result = await ProductService.deleteProduct(id);
+
+  const result = await ProductService.deleteProduct(id, sellerEmail);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: `Product ${id} deleted successfully`,
+    message: `Product deleted successfully`,
     data: result || null,
   });
 });

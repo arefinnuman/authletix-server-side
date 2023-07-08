@@ -5,15 +5,16 @@ import { PaginationHelpers } from '../../../helper/paginationHelper';
 import { IConstantFilters } from '../../../interfaces/constantFilters';
 import { IGenericResponse } from '../../../interfaces/genericResponse';
 import { IPaginationOptions } from '../../../interfaces/pagination';
+import { Seller } from '../seller/seller.model';
+import { User } from '../user/users.model';
 import { LabelEnum, productSearchableFields } from './product.constant';
 import { IProduct } from './product.interface';
 import { Product } from './product.model';
 
 const createProduct = async (payload: IProduct): Promise<IProduct | null> => {
   payload.label = LabelEnum.Available;
-  const result = (
-    await (await Product.create(payload)).populate('seller')
-  ).populate('category');
+  const product = await Product.create(payload);
+  const result = await (await product.populate('category')).populate('seller');
   return result;
 };
 
@@ -88,29 +89,70 @@ const getSingleProduct = async (id: string): Promise<IProduct | null> => {
 
 const updateProduct = async (
   id: string,
+  userEmail: string,
   payload: Partial<IProduct>
 ): Promise<IProduct | null> => {
-  const isExist = await Product.findOne({ _id: id });
+  const user = await User.findOne({ email: userEmail });
+  const product = await Product.findOne({ _id: id });
+  if (!product) throw new ApiError(httpStatus.NOT_FOUND, `Product not found`);
 
-  if (!isExist) {
-    throw new ApiError(httpStatus.NOT_FOUND, `Student (${id}) not found`);
+  if (user?.role === 'admin') {
+    const result = await Product.findOneAndUpdate({ _id: id }, payload, {
+      new: true,
+    }).populate('seller');
+
+    return result;
+  } else {
+    if (!user) throw new ApiError(httpStatus.NOT_FOUND, `User not found`);
+
+    const seller = await Seller.findOne({ _id: user?.seller });
+    if (!seller) throw new ApiError(httpStatus.NOT_FOUND, `Seller not found`);
+
+    const sellerEmail = seller?.email;
+
+    if (sellerEmail === userEmail) {
+      const result = await Product.findOneAndUpdate({ _id: id }, payload, {
+        new: true,
+      }).populate('seller');
+
+      return result;
+    } else {
+      throw new ApiError(
+        httpStatus.UNAUTHORIZED,
+        'You are not authorized to update this product'
+      );
+    }
   }
-
-  const result = await Product.findOneAndUpdate({ _id: id }, payload, {
-    new: true,
-  }).populate('seller');
-
-  return result;
 };
 
-const deleteProduct = async (id: string): Promise<IProduct | null> => {
-  const isExist = await Product.findOne({ _id: id });
+const deleteProduct = async (
+  id: string,
+  userEmail: string
+): Promise<IProduct | null> => {
+  const product = await Product.findOne({ _id: id });
+  if (!product) throw new ApiError(httpStatus.NOT_FOUND, `Product not found`);
 
-  if (!isExist) {
-    throw new ApiError(httpStatus.NOT_FOUND, `Student (${id}) not found`);
+  const user = await User.findOne({ email: userEmail });
+  if (!user) throw new ApiError(httpStatus.NOT_FOUND, `User not found`);
+
+  let result;
+  if (user?.role === 'admin') {
+    result = await Product.findOneAndDelete({ _id: id }, { new: true });
+  } else {
+    const seller = await Seller.findOne({ _id: user?.seller });
+    if (!seller) throw new ApiError(httpStatus.NOT_FOUND, `Seller not found`);
+
+    const sellerEmail = seller?.email;
+
+    if (sellerEmail === userEmail) {
+      result = await Product.findOneAndDelete({ _id: id }, { new: true });
+    } else {
+      throw new ApiError(
+        httpStatus.UNAUTHORIZED,
+        'You are not authorized to delete this product'
+      );
+    }
   }
-
-  const result = await Product.findOneAndDelete({ _id: id }, { new: true });
   return result;
 };
 

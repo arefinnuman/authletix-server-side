@@ -1,5 +1,5 @@
 import express from 'express';
-import validateRequest from '../../middlewares/validateRequest';
+import validateRequest from '../../middleWares/validateRequest';
 import { UserController } from '../user/user.controller';
 import { UserValidation } from '../user/user.validation';
 import { AuthController } from './auth.controller';
@@ -21,7 +21,7 @@ router.post(
 
 router.post(
   '/refresh-token',
-  // validateRequest(AuthValidation.refreshTokenZodSchema),
+  validateRequest(AuthValidation.refreshTokenZodSchema),
   AuthController.refreshToken
 );
 
