@@ -2,8 +2,8 @@
 import httpStatus from 'http-status';
 import mongoose from 'mongoose';
 import ApiError from '../../../handlingError/apiError';
-import { ICow } from '../cow/product.interface';
-import { Cow } from '../cow/product.model';
+import { ICow } from '../product/product.interface';
+import { Cow } from '../product/product.model';
 import { IUser } from '../user/user.interface';
 import { User } from '../user/user.model';
 import { IOrder } from './order.interface';

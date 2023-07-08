@@ -1,5 +1,5 @@
 import { Model, Types } from 'mongoose';
-import { ICow } from '../cow/product.interface';
+import { ICow } from '../product/product.interface';
 import { IUser } from '../user/user.interface';
 
 export type IOrder = {
