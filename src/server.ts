@@ -1,45 +1,45 @@
-import { Server } from 'http'
-import mongoose from 'mongoose'
-import app from './app'
-import config from './config'
+import { Server } from 'http';
+import mongoose from 'mongoose';
+import app from './app';
+import config from './config';
 
-const usingPort = config.port
-const dataBaseUrl = config.database_url as string
+const usingPort = config.port;
+const dataBaseUrl = config.database_url as string;
 
 process.on('uncaughtException', error => {
-  console.error(error)
-  process.exit(1)
-})
+  console.error(error);
+  process.exit(1);
+});
 
-let server: Server
+let server: Server;
 
 async function bootstrap() {
   try {
-    await mongoose.connect(dataBaseUrl)
+    await mongoose.connect(dataBaseUrl);
 
     server = app.listen(usingPort, () => {
-      console.log(`Eazy Buy connected and  running on port ${usingPort}`)
-    })
+      console.log(`Eazy Buy connected and  running on port ${usingPort}`);
+    });
   } catch (error) {
-    console.error(`Failed to connect`, error)
+    console.error(`Failed to connect`, error);
   }
 
   process.on('unhandledRejection', error => {
     if (server) {
       server.close(() => {
-        console.error(error)
-        process.exit(1)
-      })
+        console.error(error);
+        process.exit(1);
+      });
     } else {
-      process.exit(1)
+      process.exit(1);
     }
-  })
+  });
 }
-bootstrap()
+bootstrap();
 
 process.on(`SIGTERM`, () => {
-  console.log(`SIGTERM is received`)
+  console.log(`SIGTERM is received`);
   if (server) {
-    server.close()
+    server.close();
   }
-})
+});

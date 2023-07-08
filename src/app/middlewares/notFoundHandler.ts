@@ -1,5 +1,5 @@
-import { NextFunction, Request, Response } from 'express'
-import httpStatus from 'http-status'
+import { NextFunction, Request, Response } from 'express';
+import httpStatus from 'http-status';
 
 export const notFoundHandler = (
   req: Request,
@@ -15,6 +15,6 @@ export const notFoundHandler = (
         message: `Api not found`,
       },
     ],
-  })
-  next()
-}
+  });
+  next();
+};

@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { bloodGroup, gender } from './customer.constant';
 
-const updateZodSchema = z.object({
+const updateCustomerZodSchema = z.object({
   body: z.object({
     name: z
       .object({
@@ -28,5 +28,5 @@ const updateZodSchema = z.object({
 });
 
 export const CustomerValidation = {
-  updateStudentZodSchema,
+  updateCustomerZodSchema,
 };

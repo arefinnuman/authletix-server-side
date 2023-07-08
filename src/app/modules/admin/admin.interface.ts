@@ -1,7 +1,6 @@
 import { Model, Types } from 'mongoose';
 import { IManagingDepartment } from '../managingDepartment/managingDepartment.interface';
 
-
 export type UserName = {
   firstName: string;
   lastName: string;
