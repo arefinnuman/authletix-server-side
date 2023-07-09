@@ -29,11 +29,11 @@ routes.delete(
 
 routes.get(
   '/:id',
-  // Authorization(
-  //   ENUM_USER_ROLE.ADMIN,
-  //   ENUM_USER_ROLE.SELLER,
-  //   ENUM_USER_ROLE.CUSTOMER
-  // ),
+  Authorization(
+    ENUM_USER_ROLE.ADMIN,
+    ENUM_USER_ROLE.SELLER,
+    ENUM_USER_ROLE.CUSTOMER
+  ),
   ProductController.getSingleProduct
 );
 

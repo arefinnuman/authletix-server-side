@@ -6,6 +6,7 @@ import { BrandEnum, DeliveryTimeEnum, LabelEnum } from './product.constant';
 export type IProduct = {
   name: string;
   price: number;
+  quantity: number;
   description: string;
   productPhoto?: string;
   brand: BrandEnum;

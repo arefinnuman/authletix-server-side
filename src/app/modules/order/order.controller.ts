@@ -5,8 +5,11 @@ import sendResponse from '../../../functions/sendResponse';
 import { OrderService } from './order.service';
 
 const createOrder = catchAsync(async (req: Request, res: Response) => {
+  const userEmail = req.user?.userEmail;
+
   const { ...orderData } = req.body;
-  const result = await OrderService.createOrder(orderData);
+
+  const result = await OrderService.createOrder(orderData, userEmail);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,

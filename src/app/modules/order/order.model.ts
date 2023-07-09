@@ -3,15 +3,15 @@ import { IOrder, IOrderModel } from './order.interface';
 
 const OrderSchema = new Schema<IOrder>(
   {
-    cow: {
+    product: {
       type: Schema.Types.ObjectId,
-      ref: 'Cow',
+      ref: 'Product',
       required: true,
     },
 
-    buyer: {
+    customer: {
       type: Schema.Types.ObjectId,
-      ref: 'User',
+      ref: 'Customer',
       required: true,
     },
   },

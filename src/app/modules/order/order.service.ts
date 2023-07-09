@@ -1,33 +1,40 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+/* eslint-disable no-undef */
 /* eslint-disable no-unused-expressions */
-import httpStatus from 'http-status';
 import mongoose from 'mongoose';
+
+import httpStatus from 'http-status';
 import ApiError from '../../../handlingError/apiError';
-import { ICow } from '../product/product.interface';
-import { Cow } from '../product/product.model';
-import { IUser } from '../user/user.interface';
-import { User } from '../user/user.model';
+import { ICustomer } from '../customer/customer.interface';
+import { Customer } from '../customer/customer.model';
+import { IProduct } from '../product/product.interface';
+import { Product } from '../product/product.model';
 import { IOrder } from './order.interface';
 import { Order } from './order.model';
 
-const createOrder = async (order: IOrder): Promise<IOrder | null> => {
-  const buyer: IUser | null = await User.findOne({
-    _id: order.buyer,
+const createOrder = async (
+  order: IOrder,
+  userEmail: string
+): Promise<IOrder | null> => {
+  const customer: ICustomer | null = await Customer.findOne({
+    _id: order.customer,
   });
-
-  if (buyer?.role !== 'buyer') {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'Only buyer can create order');
+  if (!customer) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Customer not found');
+  }
+  if (userEmail !== customer.email) {
+    throw new ApiError(httpStatus.UNAUTHORIZED, 'you are not logged in user');
   }
 
-  const cow: ICow | null = await Cow.findOne({
-    _id: order.cow,
+  const product: IProduct | null = await Product.findOne({
+    _id: order.product,
   });
-
-  if (cow?.label !== 'for sale') {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'Cow is not available');
+  if (!product) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Customer not found');
   }
 
-  if (cow?.price > buyer?.budget) {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'Not Enough Money');
+  if (product?.label === 'stock out') {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'product is not available');
   }
 
   let newOrder: IOrder | null;
@@ -36,18 +43,19 @@ const createOrder = async (order: IOrder): Promise<IOrder | null> => {
   try {
     session.startTransaction();
 
-    await Cow.updateOne({ _id: order.cow }, { label: 'sold out' }, { session });
-    await User.updateOne(
-      { _id: order.buyer },
-      { $inc: { budget: -cow.price } },
+    await Product.updateOne(
+      { _id: order.product },
+      { $inc: { quantity: -1 } },
       { session }
     );
 
-    await User.updateOne(
-      { _id: cow.seller },
-      { $inc: { income: cow.price } },
-      { session }
-    );
+    if (product.quantity === 1) {
+      await Product.updateOne(
+        { _id: order.product },
+        { label: 'stock out' },
+        { session }
+      );
+    }
 
     const createdOrders = await Order.create([order], { session });
     newOrder = createdOrders[0];
@@ -58,11 +66,20 @@ const createOrder = async (order: IOrder): Promise<IOrder | null> => {
     await session.endSession();
     throw error;
   }
+
+  if (newOrder) {
+    newOrder = await Order.findOne({ _id: newOrder?._id })
+      .populate('product')
+      .populate('customer');
+  }
+
   return newOrder;
 };
 
 const getAllOrders = async (): Promise<IOrder[]> => {
-  const orders: IOrder[] = await Order.find().populate('cow').populate('buyer');
+  const orders: IOrder[] = await Order.find()
+    .populate('order')
+    .populate('customer');
   return orders;
 };
 

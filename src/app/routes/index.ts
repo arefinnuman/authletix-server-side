@@ -4,6 +4,7 @@ import { AuthRoutes } from '../modules/auth/auth.routes';
 import { CategoryRoutes } from '../modules/category/category.routes';
 import { CustomerRoutes } from '../modules/customer/customer.routes';
 import { ManagingDepartmentRoutes } from '../modules/managingDepartment/managingDepartment.routes';
+import { OrderRoutes } from '../modules/order/order.routes';
 import { ProductRoutes } from '../modules/product/product.routes';
 import { SellerRoutes } from '../modules/seller/seller.routes';
 import { UserRoutes } from '../modules/user/user.routes';
@@ -35,7 +36,10 @@ const moduleRoutes = [
     path: '/products/',
     route: ProductRoutes,
   },
-
+  {
+    path: '/orders/',
+    route: OrderRoutes,
+  },
   {
     path: '/categories/',
     route: CategoryRoutes,
