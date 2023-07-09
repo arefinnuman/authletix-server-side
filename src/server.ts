@@ -18,7 +18,7 @@ async function bootstrap() {
     await mongoose.connect(dataBaseUrl);
 
     server = app.listen(usingPort, () => {
-      console.log(`Eazy Buy connected and  running on port ${usingPort}`);
+      console.log(`AthletiX connected and  running on port ${usingPort}`);
     });
   } catch (error) {
     console.error(`Failed to connect`, error);

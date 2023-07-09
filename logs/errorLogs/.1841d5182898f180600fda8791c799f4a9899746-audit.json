@@ -1,0 +1,15 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 14
+    },
+    "auditLog": "D:\\[01] Full Stack Projects\\EasyBuy\\eazy-buy-server-side\\eazy-buy-auth-service\\logs\\errorLogs\\.1841d5182898f180600fda8791c799f4a9899746-audit.json",
+    "files": [
+        {
+            "date": 1685652672477,
+            "name": "D:\\[01] Full Stack Projects\\EasyBuy\\eazy-buy-server-side\\eazy-buy-auth-service\\logs\\errorLogs\\2023-06-02_error.log",
+            "hash": "bd40ea4882d4b9f41f00976bdde23c72238f5b24c7bb3074a1b5913dc2445678"
+        }
+    ],
+    "hashType": "sha256"
+}

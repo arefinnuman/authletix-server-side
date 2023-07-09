@@ -17,7 +17,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // Application Routes
 app.get('/', (req, res) => {
-  res.send('Hello Cow Lover!');
+  res.send('Welcome to AthletiX API');
 });
 
 app.use('/api/v1/', router);
