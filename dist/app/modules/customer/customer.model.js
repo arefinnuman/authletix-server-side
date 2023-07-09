@@ -1,68 +1,71 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+'use strict';
+Object.defineProperty(exports, '__esModule', { value: true });
 exports.Customer = exports.CustomerSchema = void 0;
-const mongoose_1 = require("mongoose");
-const customer_constant_1 = require("./customer.constant");
-exports.CustomerSchema = new mongoose_1.Schema({
+const mongoose_1 = require('mongoose');
+const customer_constant_1 = require('./customer.constant');
+exports.CustomerSchema = new mongoose_1.Schema(
+  {
     name: {
-        type: {
-            firstName: {
-                type: String,
-                required: true,
-            },
-            lastName: {
-                type: String,
-                required: true,
-            },
-            middleName: {
-                type: String,
-                required: false,
-            },
+      type: {
+        firstName: {
+          type: String,
+          required: true,
         },
-        required: true,
+        lastName: {
+          type: String,
+          required: true,
+        },
+        middleName: {
+          type: String,
+          required: false,
+        },
+      },
+      required: true,
     },
     gender: {
-        type: String,
-        enum: customer_constant_1.gender,
+      type: String,
+      enum: customer_constant_1.gender,
     },
     dateOfBirth: {
-        type: String,
+      type: String,
     },
     email: {
-        type: String,
-        unique: true,
+      type: String,
+      unique: true,
     },
     contactNo: {
-        type: String,
-        unique: true,
-        required: true,
+      type: String,
+      unique: true,
+      required: true,
     },
     emergencyContactNo: {
-        type: String,
-        required: true,
+      type: String,
+      required: true,
     },
     bloodGroup: {
-        type: String,
-        enum: customer_constant_1.bloodGroup,
+      type: String,
+      enum: customer_constant_1.bloodGroup,
     },
     presentAddress: {
-        type: String,
-        required: true,
+      type: String,
+      required: true,
     },
     permanentAddress: {
-        type: String,
-        required: true,
+      type: String,
+      required: true,
     },
     balance: {
-        type: Number,
+      type: Number,
     },
     profileImage: {
-        type: String,
+      type: String,
     },
-}, {
+  },
+  {
     timestamps: true,
     toJSON: {
-        virtuals: true,
+      virtuals: true,
     },
-});
+  }
+);
 exports.Customer = (0, mongoose_1.model)('Customer', exports.CustomerSchema);
