@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable no-undef */
 /* eslint-disable no-unused-expressions */
-import mongoose from 'mongoose';
 
 import httpStatus from 'http-status';
+import mongoose from 'mongoose';
 import ApiError from '../../../handlingError/apiError';
 import { ICustomer } from '../customer/customer.interface';
 import { Customer } from '../customer/customer.model';
@@ -76,10 +76,32 @@ const createOrder = async (
   return newOrder;
 };
 
-const getAllOrders = async (): Promise<IOrder[]> => {
-  const orders: IOrder[] = await Order.find()
-    .populate('order')
-    .populate('customer');
+const getAllOrders = async (
+  userRole: string,
+  userEmail: string,
+  sellerId: unknown
+): Promise<IOrder[]> => {
+  const customer: ICustomer | null = await Customer.findOne({
+    email: userEmail,
+  });
+  const customerId = customer?._id;
+
+  const sellerProducts: IProduct[] = await Product.find({ seller: sellerId });
+
+  let orders;
+  if (userRole === 'admin') {
+    orders = await Order.find().populate('product').populate('customer');
+  } else if (userRole === 'customer') {
+    orders = await Order.find({ customer: customerId })
+      .populate('product')
+      .populate('customer');
+  } else if (userRole === 'seller') {
+    orders = await Order.find({ product: { $in: sellerProducts } })
+      .populate('product')
+      .populate('customer');
+  } else {
+    throw new ApiError(httpStatus.UNAUTHORIZED, 'you are not logged in user');
+  }
   return orders;
 };
 

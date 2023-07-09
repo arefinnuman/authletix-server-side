@@ -1,4 +1,4 @@
-import { Model } from 'mongoose';
+import { Document, Model } from 'mongoose';
 
 export type ICustomerFilters = {
   searchTerm?: string;
@@ -15,8 +15,8 @@ export type UserName = {
   middleName: string;
 };
 
-export type ICustomer = {
-  name: UserName; //embedded object
+export type ICustomer = Document & {
+  name: UserName;
   gender: 'male' | 'female';
   dateOfBirth: string;
   email: string;
